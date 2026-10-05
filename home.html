@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>三国·卡牌炫技对决 | Three Kingdoms: Card Duel | 三国志・カード技くらべ</title>
+<meta name="description" content="三国名将齐聚的炫技卡牌对决。完美定格决胜，免费即玩，无需下载。| Three Kingdoms card duel. Free to play. | 三国志カードバトル。無料即プレイ。">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="preload" as="image" href="art/keyart/hero_banner.jpg">
+<style>
+  :root{
+    --ink:#0b0806; --ink2:#15110b; --ink3:#241a10;
+    --paper:#efe5d2; --paper2:#c9b691; --muted:#9c8c6e;
+    --gold:#c9a227; --gold2:#e8c76a; --gold3:#f4e3ae; --gold-dark:#8a6a1a;
+    --gold-soft:rgba(201,162,39,.14);
+    --red:#a8201a; --red2:#c5392f; --red3:#e0503c;
+    --shu:#4a9a5a; --wei:#4a6ab0; --wu:#c05a4a; --qun:#9a5ab0;
+    --line:rgba(201,162,39,.30);
+    --serif:"Noto Serif SC","Songti SC","Yu Mincho","STSong","SimSun",serif;
+    --sans:"Noto Sans SC","PingFang SC","Hiragino Sans","Microsoft YaHei",sans-serif;
+    /* 云纹 / 回纹 纹样 */
+    --cloud:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='88' height='14' viewBox='0 0 88 14'%3E%3Cpath d='M0 11 Q11 2 22 11 Q33 2 44 11 Q55 2 66 11 Q77 2 88 11' fill='none' stroke='%23c9a227' stroke-opacity='.45' stroke-width='1.1'/%3E%3C/svg%3E");
+    --hui:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='26' height='26' viewBox='0 0 26 26'%3E%3Cpath d='M3 3h20v20H3z' fill='none' stroke='%23c9a227' stroke-opacity='.34' stroke-width='1.1'/%3E%3Cpath d='M13 3v6M23 13h-6M13 23v-6M3 13h6' stroke='%23c9a227' stroke-opacity='.34' stroke-width='1.1'/%3E%3C/svg%3E");
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:var(--sans);
+    background:
+      radial-gradient(1100px 620px at 84% -10%, rgba(201,162,39,.10), transparent 62%),
+      radial-gradient(880px 520px at -10% 14%, rgba(168,32,26,.10), transparent 58%),
+      linear-gradient(180deg,#0a0705,#130e08 40%,#0a0705);
+    color:var(--paper); line-height:1.75; min-height:100vh; overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  /* 绢帛暗纹 */
+  body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.5;
+    background-image:
+      repeating-linear-gradient(90deg, rgba(201,162,39,.030) 0 1px, transparent 1px 3px),
+      repeating-linear-gradient(0deg, rgba(0,0,0,.28) 0 1px, transparent 1px 4px);}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1140px;margin:0 auto;padding:0 24px;position:relative;z-index:1}
+  .serif{font-family:var(--serif)}
+  .gold{color:var(--gold2)}
+  ::selection{background:var(--gold);color:#0b0806}
+
+  /* ============ NAV ============ */
+  nav{position:sticky;top:0;z-index:60;backdrop-filter:blur(16px);
+    background:linear-gradient(180deg,rgba(10,7,5,.90),rgba(10,7,5,.68));
+    border-bottom:1px solid var(--line)}
+  nav::after{content:'';position:absolute;left:0;right:0;bottom:-1px;height:6px;
+    background-image:var(--cloud);background-size:88px 14px;background-position:center;opacity:.55}
+  .nav-in{display:flex;align-items:center;justify-content:space-between;height:72px}
+  .logo{display:flex;align-items:center;gap:13px}
+  .seal{width:40px;height:40px;border-radius:7px;display:grid;place-items:center;
+    background:linear-gradient(135deg,var(--red),var(--red2));color:#fff;font-family:var(--serif);
+    font-weight:900;font-size:19px;letter-spacing:-1px;
+    box-shadow:0 0 0 1px rgba(244,227,174,.75) inset, 0 0 0 3px rgba(168,32,26,.18), 0 6px 18px rgba(168,32,26,.5)}
+  .logo .name{font-family:var(--serif);font-weight:700;font-size:19px;letter-spacing:.6px;line-height:1.05}
+  .logo .name span{display:block;color:var(--gold);font-weight:500;font-size:10.5px;letter-spacing:2.4px;opacity:.85;margin-top:2px}
+  .nav-right{display:flex;align-items:center;gap:10px}
+  .lang{display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:rgba(0,0,0,.3)}
+  .lang button{background:transparent;border:none;color:var(--muted);font-family:var(--sans);
+    padding:7px 13px;font-size:13px;cursor:pointer;transition:.2s;font-weight:600}
+  .lang button.active{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#0b0806}
+  .lang button:not(.active):hover{color:var(--paper)}
+  .play{position:relative;overflow:hidden;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#231a06;
+    padding:11px 24px;border-radius:999px;font-weight:800;font-size:14px;border:none;cursor:pointer;
+    box-shadow:0 8px 24px rgba(201,162,39,.35), 0 0 0 1px rgba(244,227,174,.5) inset;transition:.22s;font-family:var(--sans)}
+  .play:hover{transform:translateY(-2px);box-shadow:0 14px 32px rgba(201,162,39,.5), 0 0 0 1px rgba(244,227,174,.7) inset}
+  .play::after{content:'';position:absolute;top:0;left:-120%;width:60%;height:100%;
+    background:linear-gradient(100deg,transparent,rgba(255,255,255,.75),transparent);
+    transform:skewX(-18deg);animation:sweep 3.4s ease-in-out infinite}
+  @keyframes sweep{0%{left:-120%}55%{left:150%}100%{left:150%}}
+
+  /* ============ HERO ============ */
+  .hero{position:relative;min-height:min(92vh,780px);display:flex;align-items:flex-end;
+    padding:0 0 76px;overflow:hidden;background:#0a0705}
+  .hero-bg{position:absolute;inset:0;background:url('art/keyart/hero_banner.jpg') center 34%/cover no-repeat;
+    transform:scale(1.02);animation:heroDrift 26s ease-in-out infinite alternate}
+  @keyframes heroDrift{from{transform:scale(1.02) translateY(0)}to{transform:scale(1.07) translateY(-10px)}}
+  .hero-bg::after{content:'';position:absolute;inset:0;
+    background:
+      linear-gradient(180deg,rgba(10,7,5,.94) 0%,rgba(10,7,5,.50) 22%,rgba(10,7,5,.30) 40%,rgba(10,7,5,.80) 72%,#0a0705 100%),
+      radial-gradient(120% 78% at 50% 102%, rgba(168,32,26,.30), transparent 62%)}
+  .hero-vig{position:absolute;inset:0;pointer-events:none;
+    background:radial-gradient(130% 100% at 50% 42%, transparent 42%, rgba(10,7,5,.72) 100%)}
+  /* 飘落火星 */
+  .embers{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+  .embers i{position:absolute;bottom:-12px;width:3px;height:3px;border-radius:50%;
+    background:radial-gradient(circle,#ffd58a,#e0503c 60%,transparent 72%);
+    animation:rise linear infinite;opacity:0}
+  @keyframes rise{0%{transform:translateY(0) scale(.6);opacity:0}
+    12%{opacity:.95}70%{opacity:.7}100%{transform:translateY(-78vh) translateX(var(--dx,14px)) scale(.35);opacity:0}}
+  .hero .wrap{width:100%}
+  .hero-in{max-width:760px}
+  .kicker{display:inline-flex;align-items:center;gap:12px;font-family:var(--serif);font-size:13px;
+    letter-spacing:5px;color:var(--gold2);margin-bottom:20px;padding:7px 18px;
+    border:1px solid var(--line);border-radius:999px;background:rgba(10,7,5,.5)}
+  .kicker::before,.kicker::after{content:'';width:22px;height:1px;background:var(--gold);opacity:.7}
+  .hero h1{font-family:var(--serif);font-weight:900;font-size:clamp(42px,8.4vw,96px);
+    line-height:1.06;letter-spacing:4px;margin-bottom:24px;
+    background:linear-gradient(178deg,#fdf3d5 0%,#f0d68b 32%,#c9a227 62%,#8a6a1a 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    filter:drop-shadow(0 4px 26px rgba(0,0,0,.75)) drop-shadow(0 0 40px rgba(201,162,39,.22))}
+  .hero h1 .sm{display:block;font-size:.42em;letter-spacing:14px;font-weight:700;
+    background:linear-gradient(180deg,var(--gold3),var(--gold-dark));-webkit-background-clip:text;background-clip:text;
+    margin-top:12px;filter:drop-shadow(0 2px 12px rgba(0,0,0,.7))}
+  .hero p{max-width:600px;margin:0 0 34px;font-size:clamp(15px,2.1vw,18px);color:var(--paper2);
+    text-shadow:0 2px 14px rgba(0,0,0,.9)}
+  .hero-cta{display:flex;gap:16px;flex-wrap:wrap;align-items:center}
+  .btn-ghost{background:rgba(10,7,5,.55);border:1px solid var(--gold);color:var(--gold2);
+    padding:12px 28px;border-radius:999px;font-weight:700;cursor:pointer;font-size:15px;transition:.22s;
+    backdrop-filter:blur(6px);font-family:var(--sans)}
+  .btn-ghost:hover{background:var(--gold-soft);color:#fff;border-color:var(--gold3)}
+  .hero-stats{display:flex;gap:44px;margin-top:56px;flex-wrap:wrap}
+  .hero-stats .s{padding-left:16px;border-left:2px solid rgba(201,162,39,.5)}
+  .hero-stats .s b{font-family:var(--serif);display:block;font-size:34px;font-weight:900;
+    background:linear-gradient(180deg,var(--gold3),var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .hero-stats .s span{font-size:12px;letter-spacing:2.6px;color:var(--muted)}
+  /* 大印 */
+  .hero-stamp{position:absolute;right:6%;bottom:22%;width:104px;height:104px;border-radius:8px;
+    display:grid;place-items:center;font-family:var(--serif);font-weight:900;font-size:38px;line-height:1;
+    letter-spacing:-2px;color:#ffd9cf;writing-mode:vertical-rl;text-orientation:upright;
+    border:3px solid rgba(224,80,60,.9);background:linear-gradient(160deg,rgba(168,32,26,.94),rgba(122,20,16,.94));
+    transform:rotate(-7deg);box-shadow:0 0 0 5px rgba(168,32,26,.16), 0 18px 40px rgba(0,0,0,.55);
+    animation:stampIn 1.1s cubic-bezier(.2,1.5,.4,1) .3s both}
+  @keyframes stampIn{from{opacity:0;transform:rotate(-7deg) scale(1.5)}to{opacity:1;transform:rotate(-7deg) scale(1)}}
+  .hero-stamp::before{content:'';position:absolute;inset:5px;border:1px solid rgba(255,217,207,.42);border-radius:5px}
+  .scroll-hint{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);color:var(--gold);
+    font-size:11px;letter-spacing:3px;opacity:.72;animation:bob 2.4s ease-in-out infinite}
+  @keyframes bob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(7px)}}
+
+  /* ============ SECTION ============ */
+  section{padding:96px 0;position:relative}
+  .sec-head{text-align:center;margin-bottom:58px}
+  .sec-head .t{font-family:var(--serif);font-size:clamp(28px,4.2vw,42px);font-weight:900;letter-spacing:3px;margin-bottom:16px;
+    background:linear-gradient(180deg,#f6e8c0,var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent;
+    filter:drop-shadow(0 3px 16px rgba(0,0,0,.6))}
+  .sec-head .d{color:var(--muted);font-size:15px;max-width:600px;margin:0 auto}
+  .cloudrule{height:14px;margin:20px auto 0;max-width:340px;
+    background-image:var(--cloud);background-size:88px 14px;background-position:center;opacity:.8}
+  /* 装裱双框 */
+  .panel{position:relative;border:1px solid var(--line);border-radius:4px;
+    background:linear-gradient(168deg,rgba(36,26,16,.62),rgba(12,8,5,.82))}
+  .panel::before{content:'';position:absolute;inset:7px;border:1px solid rgba(201,162,39,.16);
+    border-radius:2px;pointer-events:none}
+  .panel::after{content:'';position:absolute;inset:0;pointer-events:none;opacity:.30;
+    background-image:var(--hui);background-size:26px 26px;
+    -webkit-mask-image:linear-gradient(180deg,#000,transparent 55%);mask-image:linear-gradient(180deg,#000,transparent 55%)}
+
+  /* ============ 竹简特性 ============ */
+  .slips{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--line);border-radius:4px;overflow:hidden}
+  .slip{position:relative;padding:38px 24px 40px;background:linear-gradient(180deg,#2b2013,#150e07 82%);transition:.3s}
+  .slip+.slip{border-left:1px solid rgba(201,162,39,.26)}
+  .slip::before,.slip::after{content:'';position:absolute;left:0;right:0;height:3px;
+    background:linear-gradient(90deg,transparent,rgba(178,132,60,.75),transparent)}
+  .slip::before{top:24px}.slip::after{bottom:24px}
+  .slip:hover{background:linear-gradient(180deg,#382814,#1a1108 82%)}
+  .slip .no{font-family:var(--serif);font-size:12px;letter-spacing:3px;color:var(--gold);opacity:.75;margin-bottom:12px}
+  .slip .ic{width:42px;height:42px;margin-bottom:16px}
+  .slip h3{font-family:var(--serif);font-size:21px;font-weight:800;margin-bottom:10px;letter-spacing:1.5px}
+  .slip p{color:var(--paper2);font-size:13.5px;line-height:1.72}
+
+  /* ============ 武将卡 ============ */
+  .hero-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+  .card{position:relative;border-radius:5px;overflow:hidden;background:#0e0a06;
+    border:1px solid rgba(201,162,39,.34);transition:.35s cubic-bezier(.2,.7,.3,1)}
+  .card::after{content:'';position:absolute;inset:5px;border:1px solid rgba(244,227,174,.18);
+    border-radius:3px;pointer-events:none;z-index:3}
+  .card:hover{transform:translateY(-8px);border-color:var(--gold2);
+    box-shadow:0 24px 56px rgba(0,0,0,.66), 0 0 0 1px rgba(244,227,174,.35)}
+  .card .art{position:relative;aspect-ratio:2/3;overflow:hidden;background:#120d08}
+  .card .art img{width:100%;height:100%;object-fit:cover;object-position:50% 22%;display:block;
+    transition:transform .7s cubic-bezier(.2,.7,.3,1);filter:saturate(1.04) contrast(1.04)}
+  .card:hover .art img{transform:scale(1.07)}
+  .card .art::after{content:'';position:absolute;inset:0;
+    background:linear-gradient(180deg,rgba(10,7,5,.55) 0%,transparent 26%,transparent 52%,rgba(10,7,5,.92) 100%)}
+  .card .fband{position:absolute;top:0;left:0;bottom:0;width:5px;z-index:2;
+    background:linear-gradient(180deg,var(--fc),color-mix(in srgb,var(--fc) 45%,#000));
+    box-shadow:0 0 16px var(--fc)}
+  .card .stamp{position:absolute;top:13px;right:13px;width:46px;height:46px;z-index:4;border-radius:5px;
+    display:grid;place-items:center;font-family:var(--serif);font-size:23px;font-weight:900;color:#ffe0d6;
+    border:2px solid rgba(224,80,60,.92);background:linear-gradient(160deg,rgba(168,32,26,.92),rgba(112,16,12,.92));
+    box-shadow:0 0 0 3px rgba(168,32,26,.16), 0 6px 18px rgba(0,0,0,.6);transform:rotate(-5deg)}
+  .card .fac{position:absolute;bottom:0;left:0;right:0;z-index:4;padding:12px 16px;
+    display:flex;align-items:flex-end;justify-content:space-between;gap:10px}
+  .card .fac .nm{font-family:var(--serif);font-size:26px;font-weight:900;letter-spacing:2px;
+    text-shadow:0 2px 12px #000, 0 0 22px rgba(0,0,0,.9)}
+  .card .fac .ti{font-size:11px;letter-spacing:1.6px;color:var(--gold2);text-align:right;line-height:1.5}
+  .card .fac .ti em{display:block;font-style:normal;font-size:10px;letter-spacing:1px;opacity:.8}
+  .card .meta{padding:14px 16px 18px;border-top:1px solid rgba(201,162,39,.2);background:linear-gradient(180deg,#140e08,#0c0806)}
+  .card .stat{display:flex;align-items:center;gap:9px;margin-top:8px;font-size:11.5px;color:var(--muted);letter-spacing:1px}
+  .card .stat:first-child{margin-top:0}
+  .card .stat .lb{width:34px;flex:none}
+  .card .bar{flex:1;height:6px;background:rgba(255,255,255,.07);border-radius:99px;overflow:hidden;
+    box-shadow:0 0 0 1px rgba(201,162,39,.18) inset}
+  .card .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--gold-dark),var(--gold2));
+    box-shadow:0 0 10px rgba(232,199,106,.6)}
+  .card .bar.r i{background:linear-gradient(90deg,#8a1a14,var(--red3));box-shadow:0 0 10px rgba(224,80,60,.6)}
+  .card .stat b{color:var(--gold2);font-family:var(--serif);font-size:13px;width:22px;text-align:right}
+
+  /* 更多武将 */
+  .more{margin-top:26px;text-align:center;color:var(--muted);font-size:13px;letter-spacing:1.5px}
+  .more b{color:var(--gold2);font-family:var(--serif);font-size:17px}
+
+  /* ============ 免费 ============ */
+  .free{position:relative;overflow:hidden;border:1px solid var(--line);border-radius:6px;
+    padding:60px 44px;text-align:center;
+    background:
+      radial-gradient(80% 130% at 50% 0%, rgba(168,32,26,.24), transparent 62%),
+      linear-gradient(160deg,rgba(201,162,39,.12),rgba(10,7,5,.72))}
+  .free::before{content:'';position:absolute;inset:8px;border:1px solid rgba(201,162,39,.22);border-radius:4px;pointer-events:none}
+  .free::after{content:'';position:absolute;left:0;right:0;top:0;height:12px;
+    background-image:var(--cloud);background-size:88px 14px;background-position:center;opacity:.6}
+  .free h2{font-family:var(--serif);font-size:clamp(25px,3.8vw,36px);font-weight:900;letter-spacing:3px;margin-bottom:18px;
+    background:linear-gradient(180deg,#f6e8c0,var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .free p{max-width:660px;margin:0 auto;color:var(--paper2);font-size:16px}
+  .free .tag{display:inline-block;margin-top:26px;padding:9px 22px;border:1px solid var(--gold);
+    border-radius:999px;color:var(--gold2);font-size:12px;letter-spacing:3px;background:rgba(10,7,5,.45)}
+
+  /* ============ FOOTER ============ */
+  footer{border-top:1px solid var(--line);padding:58px 0 40px;margin-top:40px;position:relative}
+  footer::before{content:'';position:absolute;left:0;right:0;top:-1px;height:8px;
+    background-image:var(--hui);background-size:26px 26px;opacity:.22}
+  .foot-in{display:flex;justify-content:space-between;gap:34px;flex-wrap:wrap;align-items:flex-start;position:relative;z-index:1}
+  .foot-in .col h4{font-family:var(--serif);font-size:16px;letter-spacing:2px;margin-bottom:15px;color:var(--gold2)}
+  .foot-in .col h4::after{content:'';display:block;width:26px;height:1px;background:var(--gold);margin-top:8px;opacity:.65}
+  .foot-in .col a,.foot-in .col p{display:block;color:var(--muted);font-size:13px;margin-bottom:10px;transition:.2s}
+  .foot-in .col a:hover{color:var(--gold2)}
+  .copy{text-align:center;color:var(--muted);font-size:12px;margin-top:42px;letter-spacing:1.2px;opacity:.85}
+
+  .rev{opacity:0;transform:translateY(24px);transition:.75s cubic-bezier(.2,.7,.2,1)}
+  .rev.in{opacity:1;transform:none}
+
+  @media(max-width:980px){ .hero-stamp{width:82px;height:82px;font-size:30px;right:4%;bottom:30%} }
+  @media(max-width:860px){
+    .slips{grid-template-columns:repeat(2,1fr)}
+    .slip:nth-child(3){border-left:none;border-top:1px solid rgba(201,162,39,.26)}
+    .slip:nth-child(4){border-top:1px solid rgba(201,162,39,.26)}
+    .hero-grid{grid-template-columns:repeat(2,1fr)}
+    .hero{min-height:auto;padding:120px 0 60px}
+    .hero-stamp{display:none}
+  }
+  @media(max-width:520px){
+    .slips{grid-template-columns:1fr}
+    .slip+.slip{border-left:none;border-top:1px solid rgba(201,162,39,.26)}
+    .hero-grid{grid-template-columns:repeat(2,1fr);gap:12px}
+    .card .fac .nm{font-size:20px}
+    .card .stamp{width:36px;height:36px;font-size:18px;top:9px;right:9px}
+    .hero-stats{gap:26px}
+    .logo .name{font-size:16px}
+    .play{padding:10px 16px;font-size:13px}
+    .lang button{padding:7px 10px;font-size:12px}
+  }
+
+  /* ============ 礼包码 + 邮箱订阅（承接漏斗） ============ */
+  .claim-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+  .claim-box{padding:38px 34px}
+  .claim-h{font-family:var(--serif);font-size:22px;letter-spacing:2px;margin-bottom:12px;color:var(--gold2)}
+  .claim-p{color:var(--paper2);font-size:14px;margin-bottom:22px;line-height:1.7}
+  .claim-row{display:flex;gap:12px}
+  .claim-input{flex:1;min-width:0;background:rgba(0,0,0,.35);border:1px solid var(--line);border-radius:8px;
+    padding:12px 14px;color:var(--paper);font-family:var(--sans);font-size:14px;outline:none;transition:.2s}
+  .claim-input:focus{border-color:var(--gold2);box-shadow:0 0 0 2px rgba(232,199,106,.25)}
+  .claim-btn{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#231a06;border:none;
+    border-radius:8px;padding:0 22px;font-weight:800;font-size:14px;cursor:pointer;font-family:var(--sans);transition:.2s;white-space:nowrap}
+  .claim-btn:hover{filter:brightness(1.08)}
+  .claim-msg{min-height:22px;margin-top:14px;font-size:13px;letter-spacing:.5px;line-height:1.6}
+  .claim-msg.ok{color:var(--shu)} .claim-msg.bad{color:var(--red3)}
+  @media(max-width:860px){ .claim-grid{grid-template-columns:1fr} .claim-box{padding:30px 22px} }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap nav-in">
+    <a class="logo" href="#top">
+      <span class="seal serif">三</span>
+      <span class="name serif">三国·卡牌炫技对决<span data-i18n="brand_sub">THREE KINGDOMS CARD DUEL</span></span>
+    </a>
+    <div class="nav-right">
+      <div class="lang" id="lang">
+        <button data-l="zh" class="active">中</button>
+        <button data-l="en">EN</button>
+        <button data-l="ja">日本語</button>
+      </div>
+      <button class="play" onclick="goPlay()" data-i18n="nav_play">立即开战</button>
+    </div>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="hero-bg"></div>
+  <div class="hero-vig"></div>
+  <div class="embers" id="embers"></div>
+  <div class="hero-stamp serif">三国</div>
+  <div class="wrap">
+    <div class="hero-in">
+      <div class="kicker" data-i18n="hero_kicker">三国 · 名将 · 对决</div>
+      <h1 class="serif"><span data-i18n="hero_title">指尖争锋</span><span class="sm" data-i18n="hero_title2">一决天下</span></h1>
+      <p data-i18n="hero_sub">三国名将齐聚，炫技定格见真章。完美时机决胜负，免费即玩，无需下载，指尖即是战场。</p>
+      <div class="hero-cta">
+        <button class="play" onclick="goPlay()" data-i18n="hero_cta">立即开战</button>
+        <button class="btn-ghost" onclick="scrollToSection('heroes')" data-i18n="hero_cta2">结识武将</button>
+      </div>
+      <div class="hero-stats">
+        <div class="s"><b>22</b><span data-i18n="stat_1">传奇武将</span></div>
+        <div class="s"><b>3</b><span data-i18n="stat_2">对决模式</span></div>
+        <div class="s"><b>0</b><span data-i18n="stat_3">付费门槛</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-hint serif">SCROLL</div>
+</header>
+
+<section id="features">
+  <div class="wrap">
+    <div class="sec-head rev">
+      <div class="t serif" data-i18n="feat_t">战法之间，见真章</div>
+      <div class="d" data-i18n="feat_d">不止是数值比拼——时机、胆识、临阵决断，才是胜负手。</div>
+      <div class="cloudrule"></div>
+    </div>
+    <div class="slips rev">
+      <div class="slip">
+        <div class="no serif">壹</div>
+        <svg class="ic" viewBox="0 0 48 48" fill="none" stroke="#e8c76a" stroke-width="1.8"><circle cx="24" cy="24" r="17"/><path d="M24 7v34M7 24h34"/><circle cx="24" cy="24" r="5.5" fill="#a8201a" stroke="none"/></svg>
+        <h3 class="serif" data-i18n="f1_t">炫技定格</h3>
+        <p data-i18n="f1_d">在决定性的一瞬按下时机，完美定格即逆转战局。手感即实力。</p>
+      </div>
+      <div class="slip">
+        <div class="no serif">贰</div>
+        <svg class="ic" viewBox="0 0 48 48" fill="none" stroke="#e8c76a" stroke-width="1.8"><path d="M24 5l4.6 13 13.4.9-10.6 8.6 3.6 13.5L24 33.4 12.9 41l3.6-13.5L5.9 18.9 19.4 18z"/></svg>
+        <h3 class="serif" data-i18n="f2_t">武将收集</h3>
+        <p data-i18n="f2_d">赵云、关羽、吕布、诸葛亮……集结三国名将，每位皆有其战法与羁绊。</p>
+      </div>
+      <div class="slip">
+        <div class="no serif">叁</div>
+        <svg class="ic" viewBox="0 0 48 48" fill="none" stroke="#e8c76a" stroke-width="1.8"><path d="M8 40V20l16-12 16 12v20"/><path d="M18 40V28h12v12"/><path d="M4 40h40"/></svg>
+        <h3 class="serif" data-i18n="f3_t">阵营羁绊</h3>
+        <p data-i18n="f3_d">魏蜀吴各有兵法与气运，排兵布阵之间，激活隐藏的阵营之力。</p>
+      </div>
+      <div class="slip">
+        <div class="no serif">肆</div>
+        <svg class="ic" viewBox="0 0 48 48" fill="none" stroke="#e8c76a" stroke-width="1.8"><path d="M24 6v34"/><path d="M12 18l12-12 12 12"/><circle cx="24" cy="40" r="3" fill="#a8201a" stroke="none"/></svg>
+        <h3 class="serif" data-i18n="f4_t">免费即玩</h3>
+        <p data-i18n="f4_d">无需注册、无需下载。点开链接即刻入阵，全内容免费畅玩。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="heroes" style="background:linear-gradient(180deg,transparent,rgba(201,162,39,.045),transparent)">
+  <div class="wrap">
+    <div class="sec-head rev">
+      <div class="t serif" data-i18n="h_t">三国名将，各领风骚</div>
+      <div class="d" data-i18n="h_d">以下仅为一隅，战场之上名将如云。</div>
+      <div class="cloudrule"></div>
+    </div>
+    <div class="hero-grid" id="heroGrid"></div>
+    <div class="more rev" data-i18n="h_more">二十二员名将悉数登场 · 更多立绘持续绘制中</div>
+  </div>
+</section>
+
+<section id="free">
+  <div class="wrap">
+    <div class="free rev">
+      <h2 class="serif" data-i18n="free_t">完全免费，广告支撑</h2>
+      <p data-i18n="free_d">我们靠广告收益维持运营与持续更新——你无需付费，即可畅玩全部内容与武将。透明、克制、无强制消费。</p>
+      <span class="tag serif" data-i18n="free_tag">FREE · NO DOWNLOAD · NO PAYWALL</span>
+    </div>
+  </div>
+</section>
+
+<section id="claim" style="background:linear-gradient(180deg,transparent,rgba(168,32,26,.05),transparent)">
+  <div class="wrap">
+    <div class="sec-head rev">
+      <div class="t serif" data-i18n="claim_t">领取礼包 · 订阅战报</div>
+      <div class="d" data-i18n="claim_d">输入合作平台礼包码免费领奖；订阅邮箱，领取《零氪开局卡组》PDF 与版本更新。</div>
+      <div class="cloudrule"></div>
+    </div>
+    <div class="claim-grid">
+      <div class="panel claim-box rev">
+        <div class="claim-h serif" data-i18n="gift_t">🎁 礼包码领取</div>
+        <p class="claim-p" data-i18n="gift_d">来自联运 / 社群的专属礼包码，可兑换去广告、皮肤等权益（进入游戏生效）。</p>
+        <div class="claim-row">
+          <input id="gift-input" class="claim-input" data-ph="gift_ph" placeholder="输入礼包码">
+          <button id="gift-btn" class="claim-btn" data-i18n="gift_btn">兑换</button>
+        </div>
+        <div id="gift-msg" class="claim-msg"></div>
+      </div>
+      <div class="panel claim-box rev">
+        <div class="claim-h serif" data-i18n="mail_t">✉️ 邮箱订阅</div>
+        <p class="claim-p" data-i18n="mail_d">领取《零氪开局卡组 PDF》，后续版本更新与活动直达邮箱，不打扰。</p>
+        <div class="claim-row">
+          <input id="mail-input" class="claim-input" data-ph="mail_ph" placeholder="你的邮箱">
+          <button id="mail-btn" class="claim-btn" data-i18n="mail_btn">订阅</button>
+        </div>
+        <div id="mail-msg" class="claim-msg"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot-in">
+    <div class="col">
+      <div class="logo" style="margin-bottom:18px">
+        <span class="seal serif">三</span>
+        <span class="name serif">三国·卡牌炫技对决<span data-i18n="brand_sub">THREE KINGDOMS CARD DUEL</span></span>
+      </div>
+      <p data-i18n="foot_about">一款由 AI 全程托管运营的免费三国卡牌对决小游戏。设计、开发、运营、迭代，皆由智能体驱动。</p>
+    </div>
+    <div class="col">
+      <h4 class="serif" data-i18n="foot_play">游玩</h4>
+      <a href="#" onclick="goPlay();return false;" data-i18n="foot_play1">进入游戏</a>
+      <a href="#features" data-i18n="foot_play2">玩法说明</a>
+      <a href="#heroes" data-i18n="foot_play3">武将图鉴</a>
+    </div>
+    <div class="col">
+      <h4 class="serif" data-i18n="foot_lang">语言</h4>
+      <a href="#" onclick="setLang('zh');return false;">中文</a>
+      <a href="#" onclick="setLang('en');return false;">English</a>
+      <a href="#" onclick="setLang('ja');return false;">日本語</a>
+    </div>
+  </div>
+  <div class="copy" data-i18n="copy">© 2026 三国·卡牌炫技对决 · AI 托管运营 · 保留所有权利</div>
+</footer>
+
+<script>
+/* 武将展示（含真实立绘、阵营、印信） */
+const HERO_ART = [
+  {key:'guanyu', img:'art/portraits/guanyu.jpg', fc:'var(--shu)', seal:'关',
+   cn:'关羽', en:'GUAN YU', jp:'関羽', pw:97, ww:84,
+   t:{zh:'武圣', en:'The Saint', ja:'武聖'}, f:{zh:'蜀', en:'Shu', ja:'蜀'}},
+  {key:'lubu', img:'art/portraits/lubu.jpg', fc:'var(--qun)', seal:'吕',
+   cn:'吕布', en:'LÜ BU', jp:'呂布', pw:99, ww:58,
+   t:{zh:'飞将', en:'Flying General', ja:'飛将'}, f:{zh:'群雄', en:'Warlords', ja:'群雄'}},
+  {key:'caocao', img:'art/portraits/caocao.jpg', fc:'var(--wei)', seal:'曹',
+   cn:'曹操', en:'CAO CAO', jp:'曹操', pw:84, ww:94,
+   t:{zh:'奸雄', en:'Schemer', ja:'姦雄'}, f:{zh:'魏', en:'Wei', ja:'魏'}},
+  {key:'zhouyu', img:'art/portraits/zhouyu.jpg', fc:'var(--wu)', seal:'周',
+   cn:'周瑜', en:'ZHOU YU', jp:'周瑜', pw:74, ww:95,
+   t:{zh:'公瑾', en:'Gongjin', ja:'公瑾'}, f:{zh:'吴', en:'Wu', ja:'呉'}},
+  {key:'zhangfei', img:'art/portraits/zhangfei.jpg', fc:'var(--shu)', seal:'张',
+   cn:'张飞', en:'ZHANG FEI', jp:'張飛', pw:96, ww:72,
+   t:{zh:'万人敌', en:'Vanquisher', ja:'万敵'}, f:{zh:'蜀', en:'Shu', ja:'蜀'}},
+  {key:'zhaoyun', img:'art/portraits/zhaoyun.jpg', fc:'var(--shu)', seal:'赵',
+   cn:'赵云', en:'ZHAO YUN', jp:'趙雲', pw:95, ww:88,
+   t:{zh:'常胜将军', en:'Ever-Victorious', ja:'常勝将軍'}, f:{zh:'蜀', en:'Shu', ja:'蜀'}},
+  {key:'zhugeliang', img:'art/portraits/zhugeliang.jpg', fc:'var(--shu)', seal:'诸葛',
+   cn:'诸葛亮', en:'ZHUGE LIANG', jp:'諸葛亮', pw:52, ww:99,
+   t:{zh:'卧龙', en:'Sleeping Dragon', ja:'臥龍'}, f:{zh:'蜀', en:'Shu', ja:'蜀'}},
+  {key:'liubei', img:'art/portraits/liubei.jpg', fc:'var(--shu)', seal:'刘',
+   cn:'刘备', en:'LIU BEI', jp:'劉備', pw:78, ww:90,
+   t:{zh:'仁德', en:'Benevolence', ja:'仁德'}, f:{zh:'蜀', en:'Shu', ja:'蜀'}},
+  {key:'sunce', img:'art/portraits/sunce.jpg', fc:'var(--wu)', seal:'孙',
+   cn:'孙策', en:'SUN CE', jp:'孫策', pw:93, ww:75,
+   t:{zh:'小霸王', en:'Little Conqueror', ja:'小覇王'}, f:{zh:'吴', en:'Wu', ja:'呉'}},
+  {key:'sunquan', img:'art/portraits/sunquan.jpg', fc:'var(--wu)', seal:'孙',
+   cn:'孙权', en:'SUN QUAN', jp:'孫権', pw:80, ww:92,
+   t:{zh:'仲谋', en:'Zhongmou', ja:'仲謀'}, f:{zh:'吴', en:'Wu', ja:'呉'}},
+  {key:'simayi', img:'art/portraits/simayi.jpg', fc:'var(--wei)', seal:'司马',
+   cn:'司马懿', en:'SIMA YI', jp:'司馬懿', pw:56, ww:96,
+   t:{zh:'冢虎', en:'Hidden Tiger', ja:'塚虎'}, f:{zh:'魏', en:'Wei', ja:'魏'}},
+  {key:'dianwei', img:'art/portraits/dianwei.jpg', fc:'var(--wei)', seal:'韦',
+   cn:'典韦', en:'DIAN WEI', jp:'典韋', pw:93, ww:55,
+   t:{zh:'古之恶来', en:'Evil Come', ja:'古之悪来'}, f:{zh:'魏', en:'Wei', ja:'魏'}}
+];
+
+const I18N = {
+  zh:{
+    brand_sub:"THREE KINGDOMS CARD DUEL", nav_play:"立即开战",
+    hero_kicker:"三国 · 名将 · 对决", hero_title:"指尖争锋", hero_title2:"一决天下",
+    hero_sub:"三国名将齐聚，炫技定格见真章。完美时机决胜负，免费即玩，无需下载，指尖即是战场。",
+    hero_cta:"立即开战", hero_cta2:"结识武将",
+    stat_1:"传奇武将", stat_2:"对决模式", stat_3:"付费门槛",
+    feat_t:"战法之间，见真章", feat_d:"不止是数值比拼——时机、胆识、临阵决断，才是胜负手。",
+    f1_t:"炫技定格", f1_d:"在决定性的一瞬按下时机，完美定格即逆转战局。手感即实力。",
+    f2_t:"武将收集", f2_d:"赵云、关羽、吕布、诸葛亮……集结三国名将，每位皆有其战法与羁绊。",
+    f3_t:"阵营羁绊", f3_d:"魏蜀吴各有兵法与气运，排兵布阵之间，激活隐藏的阵营之力。",
+    f4_t:"免费即玩", f4_d:"无需注册、无需下载。点开链接即刻入阵，全内容免费畅玩。",
+    h_t:"三国名将，各领风骚", h_d:"以下仅为一隅，战场之上名将如云。",
+    h_more:"二十二员名将悉数登场 · 更多立绘持续绘制中",
+    free_t:"完全免费，广告支撑", free_d:"我们靠广告收益维持运营与持续更新——你无需付费，即可畅玩全部内容与武将。透明、克制、无强制消费。",
+    free_tag:"FREE · NO DOWNLOAD · NO PAYWALL",
+    foot_about:"一款由 AI 全程托管运营的免费三国卡牌对决小游戏。设计、开发、运营、迭代，皆由智能体驱动。",
+    foot_play:"游玩", foot_play1:"进入游戏", foot_play2:"玩法说明", foot_play3:"武将图鉴",
+    foot_lang:"语言",
+    copy:"© 2026 三国·卡牌炫技对决 · AI 托管运营 · 保留所有权利",
+    claim_t:"领取礼包 · 订阅战报", claim_d:"输入合作平台礼包码免费领奖；订阅邮箱，领取《零氪开局卡组》PDF 与版本更新。",
+    gift_t:"🎁 礼包码领取", gift_d:"来自联运 / 社群的专属礼包码，可兑换去广告、皮肤等权益（进入游戏生效）。",
+    gift_btn:"兑换", mail_t:"✉️ 邮箱订阅", mail_d:"领取《零氪开局卡组 PDF》，后续版本更新与活动直达邮箱，不打扰。", mail_btn:"订阅",
+    pw:"武力", ww:"智力"
+  },
+  en:{
+    brand_sub:"THREE KINGDOMS CARD DUEL", nav_play:"Play Now",
+    hero_kicker:"THREE KINGDOMS · HEROES · DUEL", hero_title:"Duel at Your", hero_title2:"FINGERTIPS",
+    hero_sub:"Legendary warriors of the Three Kingdoms await. Win by perfect timing — free to play, no download, the battlefield is in your hands.",
+    hero_cta:"Play Now", hero_cta2:"Meet Heroes",
+    stat_1:"Legendary Heroes", stat_2:"Duel Modes", stat_3:"Paywall",
+    feat_t:"Skill Over Strength", feat_d:"More than raw numbers — timing, nerve and split-second decisions decide the day.",
+    f1_t:"Timing Duel", f1_d:"Press at the decisive instant; a perfect freeze turns the tide. Feel is power.",
+    f2_t:"Hero Roster", f2_d:"Zhao Yun, Guan Yu, Lu Bu, Zhuge Liang… gather the legends, each with their own art and bond.",
+    f3_t:"Faction Bonds", f3_d:"Wei, Shu and Wu each hold their own tactics and fortune — deploy them to awaken hidden power.",
+    f4_t:"Free & Instant", f4_d:"No sign-up, no download. Open the link and enter the fray — everything free.",
+    h_t:"Legends of the Realm", h_d:"A glimpse only — the battlefield brims with heroes.",
+    h_more:"All 22 heroes in the roster · more splash art in progress",
+    free_t:"Free, Ad-Supported", free_d:"We sustain operations and updates through ad revenue — you pay nothing to enjoy all content and heroes. Transparent, restrained, no forced spending.",
+    free_tag:"FREE · NO DOWNLOAD · NO PAYWALL",
+    foot_about:"A free Three Kingdoms card duel game run end-to-end by AI operations. Design, dev, growth and iteration are agent-driven.",
+    foot_play:"Play", foot_play1:"Enter Game", foot_play2:"How to Play", foot_play3:"Hero Codex",
+    foot_lang:"Language",
+    copy:"© 2026 Three Kingdoms: Card Duel · AI-operated · All rights reserved",
+    claim_t:"Claim Codes · Subscribe", claim_d:"Enter a partner gift code for free rewards; subscribe by email for the Starter Deck PDF and updates.",
+    gift_t:"🎁 Redeem Gift Code", gift_d:"Exclusive codes from partners / communities unlock ad-free, skins and more (applied in-game).",
+    gift_btn:"Redeem", mail_t:"✉️ Email Subscribe", mail_d:"Get the F2P Starter Deck PDF; version updates and events straight to your inbox.", mail_btn:"Subscribe",
+    pw:"POWER", ww:"WISDOM"
+  },
+  ja:{
+    brand_sub:"THREE KINGDOMS CARD DUEL", nav_play:"今すぐ対戦",
+    hero_kicker:"三国志 · 名将 · 対決", hero_title:"指先の", hero_title2:"勝負",
+    hero_sub:"三国の名将が集う。完璧なタイミングで勝敗を分かつ——無料・ダウンロード不要、戦場はあなたの指先に。",
+    hero_cta:"今すぐ対戦", hero_cta2:"武将を見る",
+    stat_1:"伝説の武将", stat_2:"対決モード", stat_3:"課金の壁",
+    feat_t:"技と知略、ここに極まる", feat_d:"単なる数値比べではない——タイミングと胆力、その場の決断こそが勝敗を分つ。",
+    f1_t:"技くらべ", f1_d:"決定的な一瞬でタイミングを押せ。完璧な合わせが戦局をひっくり返す。感覚こそ実力。",
+    f2_t:"武将収集", f2_d:"趙雲、関羽、呂布、諸葛亮……三国の名将を集め、それぞれの戦法と絆を味わえ。",
+    f3_t:"陣営の絆", f3_d:"魏・蜀・呉、それぞれに兵法と運がある。配置により隠された力を呼び覚ます。",
+    f4_t:"無料即プレイ", f4_d:"登録もダウンロードも不要。リンクを開けば即参戦、すべて無料で遊べる。",
+    h_t:"三国の名将、各々風采", h_d:"ほんの一例。戦場には名将があまたいる。",
+    h_more:"二十二将すべて参戦 · 立絵は順次制作中",
+    free_t:"完全無料・広告支援", free_d:"運営とアップデートは広告収益で成り立つ——すべてのコンテンツと武将を無料で楽しめる。透明・節度・強制課金なし。",
+    free_tag:"FREE · NO DOWNLOAD · NO PAYWALL",
+    foot_about:"AIが運営を一手に担う無料の三国志カードバトル。設計・開発・成長・改善はすべてエージェント主導。",
+    foot_play:"遊ぶ", foot_play1:"ゲームへ", foot_play2:"遊び方", foot_play3:"武将図鑑",
+    foot_lang:"言語",
+    copy:"© 2026 三国志・カード技くらべ · AI運営 · 無断転載禁止",
+    claim_t:"コード受取・メルマガ登録", claim_d:"提携コードで無料特典をゲット。メール登録で《無課金初級デッキ》PDFとアップデートを。",
+    gift_t:"🎁 コード受取", gift_d:"提携・コミュニティの専用コードで広告除去やスキンなどを解放（ゲーム内で反映）。",
+    gift_btn:"受取", mail_t:"✉️ メルマガ登録", mail_d:"《無課金初級デッキ PDF》をゲット。アップデートやイベントをお知らせ。", mail_btn:"登録",
+    pw:"武力", ww:"知力"
+  }
+};
+
+const PH = {
+  zh:{ gift_ph:'输入礼包码', mail_ph:'你的邮箱' },
+  en:{ gift_ph:'Enter gift code', mail_ph:'Your email' },
+  ja:{ gift_ph:'コードを入力', mail_ph:'メールアドレス' }
+};
+
+function renderHeroes(lang){
+  const L = I18N[lang];
+  document.getElementById('heroGrid').innerHTML = HERO_ART.map(h=>{
+    const nm = h[lang] || h.cn;
+    return `
+    <div class="card" style="--fc:${h.fc}">
+      <div class="art">
+        <span class="fband"></span>
+        <img src="${h.img}" alt="${h.cn}" loading="lazy" decoding="async">
+        <span class="stamp serif">${h.seal}</span>
+        <div class="fac">
+          <div class="nm serif">${nm}</div>
+          <div class="ti">${h.t[lang]}<em>${h.f[lang]}</em></div>
+        </div>
+      </div>
+      <div class="meta">
+        <div class="stat"><span class="lb">${L.pw}</span><span class="bar"><i style="width:${h.pw}%"></i></span><b>${h.pw}</b></div>
+        <div class="stat"><span class="lb">${L.ww}</span><span class="bar r"><i style="width:${h.ww}%"></i></span><b>${h.ww}</b></div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function applyLang(lang){
+  document.documentElement.lang = lang;
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    if(el.closest('.card')) return;
+    const k = el.getAttribute('data-i18n');
+    if(I18N[lang][k]!=null) el.textContent = I18N[lang][k];
+  });
+  document.querySelectorAll('[data-ph]').forEach(el=>{
+    const k = el.getAttribute('data-ph');
+    if(PH[lang] && PH[lang][k]!=null) el.placeholder = PH[lang][k];
+  });
+  renderHeroes(lang);
+}
+
+function setLang(lang){
+  localStorage.setItem('sgk_lang', lang);
+  document.querySelectorAll('#lang button').forEach(b=>b.classList.toggle('active', b.dataset.l==lang));
+  applyLang(lang);
+}
+
+function initLang(){
+  let lang = localStorage.getItem('sgk_lang');
+  if(!lang){
+    const nav = (navigator.language||'zh').toLowerCase();
+    lang = nav.startsWith('ja')?'ja':nav.startsWith('zh')?'zh':'en';
+  }
+  if(!I18N[lang]) lang = 'zh';
+  document.querySelectorAll('#lang button').forEach(b=>b.classList.toggle('active', b.dataset.l==lang));
+  applyLang(lang);
+}
+
+function goPlay(){ window.location.href = './index.html'; }
+function scrollToSection(id){ document.getElementById(id).scrollIntoView({behavior:'smooth'}); }
+
+document.getElementById('lang').addEventListener('click', e=>{
+  const b = e.target.closest('button'); if(b) setLang(b.dataset.l);
+});
+
+/* 火星粒子 */
+(function(){
+  const box = document.getElementById('embers');
+  if(!box) return;
+  const n = window.innerWidth < 700 ? 10 : 20;
+  let html = '';
+  for(let i=0;i<n;i++){
+    const left = Math.random()*100, dur = 7+Math.random()*9, delay = Math.random()*10;
+    const dx = (Math.random()*80-40).toFixed(0);
+    const sz = (2+Math.random()*2.4).toFixed(1);
+    html += `<i style="left:${left.toFixed(1)}%;--dx:${dx}px;width:${sz}px;height:${sz}px;
+      animation-duration:${dur.toFixed(1)}s;animation-delay:${delay.toFixed(1)}s"></i>`;
+  }
+  box.innerHTML = html;
+})();
+
+/* 滚动淡入 */
+const io = new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } }),{threshold:.12});
+document.querySelectorAll('.rev').forEach(el=>io.observe(el));
+
+/* ============ 礼包码 + 邮箱订阅（承接漏斗） ============ */
+const GIFT_CODES = {
+  'SG300':'remove_ad', 'DC2026':'skin', 'TIEBA':'tips10', 'BILIBILI':'remove_ad', 'TIKTOK':'skin', 'NGA':'tips10'
+};
+const MAIL_ENDPOINT = ''; // 填入 Formspree / Mailchimp 等表单端点后，邮箱会真实收集并发送 PDF
+function toastHome(msg){
+  let t = document.getElementById('home-toast');
+  if(!t){
+    t = document.createElement('div'); t.id='home-toast';
+    t.style.cssText='position:fixed;left:50%;bottom:32px;transform:translateX(-50%);z-index:200;'
+      +'background:rgba(10,7,5,.94);border:1px solid var(--gold);color:var(--gold2);padding:12px 22px;'
+      +'border-radius:999px;font-size:14px;letter-spacing:1px;box-shadow:0 10px 30px rgba(0,0,0,.6);transition:.3s;opacity:0;pointer-events:none';
+    document.body.appendChild(t);
+  }
+  t.textContent = msg; t.style.opacity = 1;
+  clearTimeout(t._t); t._t = setTimeout(()=>{ t.style.opacity = 0; }, 2200);
+}
+function redeemCode(){
+  const el = document.getElementById('gift-input'), msg = document.getElementById('gift-msg');
+  const code = (el.value||'').trim().toUpperCase();
+  if(!code){ msg.textContent='请输入礼包码'; msg.className='claim-msg bad'; return; }
+  const sku = GIFT_CODES[code];
+  if(!sku){ msg.textContent='礼包码无效或已过期'; msg.className='claim-msg bad'; return; }
+  let owned = JSON.parse(localStorage.getItem('sgk_owned')||'{}');
+  if(owned[sku]){ msg.textContent='该权益已拥有'; msg.className='claim-msg ok'; return; }
+  owned[sku]=true; localStorage.setItem('sgk_owned', JSON.stringify(owned));
+  const nm = ({remove_ad:'永久去广告', tips10:'提示券×10', skin:'至尊皮肤包'})[sku];
+  msg.textContent='兑换成功！已发放：'+nm+'（进入游戏生效）'; msg.className='claim-msg ok';
+  el.value=''; toastHome('🎁 已发放：'+nm);
+}
+function subscribeMail(){
+  const el = document.getElementById('mail-input'), msg = document.getElementById('mail-msg');
+  const v = (el.value||'').trim();
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v)){ msg.textContent='邮箱格式不正确'; msg.className='claim-msg bad'; return; }
+  if(MAIL_ENDPOINT){
+    fetch(MAIL_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},
+      body:JSON.stringify({email:v,src:'landing'})}).then(r=>{
+        msg.textContent = r.ok ? '订阅成功！PDF 已发至邮箱' : '提交失败，请稍后再试';
+        msg.className = r.ok ? 'claim-msg ok' : 'claim-msg bad';
+      }).catch(()=>{ msg.textContent='提交失败，请稍后再试'; msg.className='claim-msg bad'; });
+  } else {
+    let list = JSON.parse(localStorage.getItem('sgk_mails')||'[]'); list.push(v);
+    localStorage.setItem('sgk_mails', JSON.stringify(list));
+    msg.textContent='已记录（演示模式，未接入邮件服务）'; msg.className='claim-msg ok';
+  }
+  el.value='';
+}
+document.getElementById('gift-btn').addEventListener('click', redeemCode);
+document.getElementById('mail-btn').addEventListener('click', subscribeMail);
+
+initLang();
+</script>
+</body>
+</html>
