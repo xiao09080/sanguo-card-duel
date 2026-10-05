@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>三国卡牌对决 · 推广海报</title>
+<link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@700;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#0d0a06;display:flex;align-items:center;justify-content:center;min-height:100vh;}
+.poster{width:750px;height:1100px;position:relative;overflow:hidden;font-family:'Noto Serif SC',serif;}
+.bg{position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 70% 45% at 50% 28%, rgba(216,140,60,.38), transparent 60%),
+    radial-gradient(ellipse 60% 40% at 50% 100%, rgba(176,58,46,.32), transparent 60%),
+    linear-gradient(180deg,#1a0e08,#0d0a06 70%);}
+.sun{position:absolute;top:150px;left:50%;transform:translateX(-50%);width:280px;height:280px;border-radius:50%;
+  background:radial-gradient(circle,#ffe8b0 0%,rgba(240,176,80,.5) 45%,transparent 70%);}
+.mountains{position:absolute;bottom:0;left:0;width:100%;}
+.title{position:absolute;top:110px;width:100%;text-align:center;z-index:2;}
+.title h1{font-family:'Ma Shan Zheng',cursive;font-size:108px;letter-spacing:.08em;
+  background:linear-gradient(180deg,#fff3c8,#f0c860 45%,#c89020 70%,#f5d890);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 6px 12px rgba(0,0,0,.9)) drop-shadow(0 0 40px rgba(240,200,90,.4));}
+.sub{color:#e8c890;letter-spacing:.5em;text-indent:.5em;font-size:22px;margin-top:14px;}
+.seal{position:absolute;top:92px;right:88px;width:84px;height:84px;border-radius:12px;
+  background:linear-gradient(160deg,#c0392b,#8e2418);color:#f8ecd2;
+  font-family:'Ma Shan Zheng';font-size:44px;display:flex;align-items:center;justify-content:center;
+  transform:rotate(-8deg);box-shadow:inset 0 0 0 4px rgba(248,236,210,.6),0 8px 20px rgba(0,0,0,.6);z-index:3;}
+.chars{position:absolute;top:330px;width:100%;display:flex;justify-content:center;gap:24px;z-index:2;}
+.chip{width:148px;height:148px;border-radius:50%;border:4px solid #d8b45a;overflow:hidden;
+  box-shadow:0 0 30px rgba(216,180,90,.4),0 12px 30px rgba(0,0,0,.7);background:#2a1a10;}
+.chip svg{width:100%;height:100%;display:block;}
+.rules{position:absolute;top:560px;width:100%;display:flex;flex-direction:column;gap:13px;align-items:center;z-index:2;}
+.rule{background:rgba(46,32,18,.85);border:1px solid rgba(216,180,90,.5);border-radius:12px;
+  padding:11px 30px;color:#d8c9a8;font-size:20px;letter-spacing:.05em;}
+.rule b{color:#f0d089;}
+.qrwrap{position:absolute;bottom:54px;width:100%;display:flex;flex-direction:column;align-items:center;gap:16px;z-index:2;}
+.qr-cap{font-family:'Ma Shan Zheng';font-size:34px;letter-spacing:.12em;color:#f0d089;
+  text-shadow:0 2px 10px rgba(0,0,0,.9),0 0 30px rgba(240,200,90,.4);}
+.qr-card{background:#fff;padding:14px;border-radius:18px;
+  box-shadow:0 0 0 4px rgba(216,180,90,.65),0 0 0 8px rgba(140,36,27,.45),0 18px 44px rgba(0,0,0,.7),0 0 54px rgba(240,200,90,.45);}
+.qr-card svg{display:block;width:178px;height:178px;}
+.qr-tip{color:#d8c9a8;font-size:17px;letter-spacing:.22em;text-shadow:0 2px 8px rgba(0,0,0,.8);}
+</style>
+</head>
+<body>
+<div class="poster">
+  <div class="bg"></div>
+  <div class="sun"></div>
+  <svg class="mountains" viewBox="0 0 750 300" preserveAspectRatio="none">
+    <path d="M0 180 L90 90 L180 160 L280 70 L390 170 L480 100 L590 180 L680 120 L750 170 L750 300 L0 300 Z" fill="#2a1408" opacity="0.9"/>
+    <path d="M0 230 L120 150 L240 220 L360 140 L480 230 L600 160 L750 240 L750 300 L0 300 Z" fill="#1a0c05"/>
+  </svg>
+  <div class="title">
+    <h1>三国卡牌对决</h1>
+    <div class="sub">出牌炫技 · 比武斗智 · 综合实力</div>
+  </div>
+  <div class="seal">对决</div>
+  <div class="chars" id="chars"></div>
+  <div class="rules">
+    <div class="rule">⚔️ <b>武力</b> / 🧠 <b>智力</b> / ⭐ <b>综合实力</b> 三种对决</div>
+    <div class="rule">✨ <b>炫技定格</b>：完美释放技能全满 + 全属性+2</div>
+    <div class="rule">🏴 <b>俘虏规则</b>：胜者俘虏对方武将，壮大阵容</div>
+    <div class="rule">📱 <b>免下载</b>：扫码即玩 · 手机电脑通用</div>
+  </div>
+  <div class="qrwrap">
+    <div class="qr-cap">📱 扫码即玩</div>
+    <div class="qr-card"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 370 370" width="178" height="178" class="segno"><g transform="scale(10)"><path fill="#fff" d="M0 0h37v37h-37z"/><path class="qrline" stroke="#111" d="M2 2.5h7m3 0h1m3 0h1m4 0h2m2 0h1m2 0h7m-33 1h1m5 0h1m4 0h1m3 0h1m2 0h1m3 0h1m3 0h1m5 0h1m-33 1h1m1 0h3m1 0h1m1 0h1m1 0h3m1 0h1m5 0h2m4 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h1m2 0h1m3 0h1m2 0h1m3 0h1m1 0h1m1 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h1m1 0h1m1 0h1m1 0h3m3 0h1m2 0h2m1 0h1m1 0h3m1 0h1m-33 1h1m5 0h1m1 0h1m1 0h1m1 0h3m4 0h1m2 0h1m3 0h1m5 0h1m-33 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-25 1h1m3 0h1m3 0h1m2 0h4m1 0h1m-25 1h1m1 0h5m2 0h5m2 0h2m1 0h1m3 0h1m2 0h5m-29 1h1m2 0h1m1 0h2m4 0h1m3 0h4m2 0h1m2 0h2m1 0h4m-33 1h1m1 0h1m2 0h4m1 0h6m1 0h1m2 0h2m4 0h1m1 0h1m1 0h2m-29 1h2m3 0h1m1 0h1m1 0h2m1 0h1m1 0h2m1 0h2m1 0h1m1 0h2m1 0h3m-29 1h5m1 0h4m2 0h3m2 0h1m2 0h1m2 0h1m1 0h3m-29 1h1m6 0h1m1 0h1m1 0h2m1 0h1m2 0h1m4 0h1m2 0h1m3 0h3m-30 1h6m1 0h1m2 0h1m1 0h2m4 0h2m1 0h5m1 0h2m-32 1h3m4 0h1m3 0h2m1 0h2m5 0h2m2 0h3m2 0h1m-31 1h1m1 0h2m1 0h2m3 0h1m1 0h1m1 0h4m4 0h1m1 0h2m1 0h2m3 0h1m-33 1h1m2 0h3m2 0h1m1 0h5m3 0h2m3 0h1m1 0h3m1 0h4m-33 1h2m4 0h2m1 0h4m2 0h2m1 0h1m3 0h1m1 0h1m2 0h2m1 0h2m-30 1h2m1 0h1m1 0h2m1 0h5m5 0h4m2 0h6m-32 1h1m2 0h2m1 0h4m1 0h5m2 0h1m3 0h4m2 0h2m-30 1h1m1 0h2m4 0h3m1 0h1m1 0h4m3 0h3m1 0h2m2 0h1m2 0h1m-33 1h1m2 0h1m1 0h2m1 0h3m9 0h1m3 0h1m3 0h1m2 0h1m-32 1h1m3 0h2m3 0h4m1 0h1m1 0h1m1 0h5m2 0h2m1 0h3m1 0h1m-33 1h1m1 0h7m1 0h1m1 0h1m1 0h1m1 0h4m2 0h1m1 0h6m-22 1h2m3 0h1m3 0h5m2 0h1m3 0h1m1 0h1m1 0h1m-33 1h7m5 0h1m1 0h4m5 0h2m1 0h1m1 0h1m1 0h2m-32 1h1m5 0h1m1 0h3m3 0h1m1 0h4m1 0h4m3 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h1m2 0h1m3 0h2m5 0h1m1 0h6m1 0h2m-33 1h1m1 0h3m1 0h1m1 0h2m2 0h1m1 0h2m1 0h3m1 0h5m2 0h5m-33 1h1m1 0h3m1 0h1m1 0h1m1 0h1m2 0h1m1 0h2m4 0h1m2 0h1m1 0h2m1 0h1m-30 1h1m5 0h1m3 0h1m1 0h1m1 0h2m4 0h3m2 0h1m2 0h3m-31 1h7m1 0h1m1 0h1m2 0h6m1 0h1m1 0h4m1 0h1m3 0h1"/></g></svg></div>
+    <div class="qr-tip">22 位三国名将等你收录 · 武将出自《三国演义》</div>
+  </div>
+</div>
+<script>
+const cfg={
+ '吕布':{bg:['#5a2a1a','#2a120c'],robe:'#4a4f5e',trim:'#d8b45a',face:'#e0b58a',helmet:'trident',beard:'none',hair:'#1a1a1a',weapon:'halberd'},
+ '关羽':{bg:['#7a1f1a','#3a0f0c'],robe:'#2a6a4a',trim:'#d8b45a',face:'#c84a3a',helmet:'general',beard:'long',hair:'#141414',weapon:'guandao'},
+ '赵云':{bg:['#2a4a5a','#10202a'],robe:'#e8e4da',trim:'#b8c4d4',face:'#f0d5b0',helmet:'whitehelm',beard:'none',hair:'#1a1a1a',weapon:'spear'},
+ '诸葛亮':{bg:['#4a4a3a','#24241a'],robe:'#e8e0cc',trim:'#d8b45a',face:'#f0d5b0',helmet:'feather',beard:'none',hair:'#1a1a1a',weapon:'fan'},
+};
+function darken(hex,f){const n=parseInt(hex.slice(1),16);const r=(n>>16)&255,g=(n>>8)&255,b=n&255;return `rgb(${r*f|0},${g*f|0},${b*f|0})`;}
+function helmetSVG(t,tr){
+ if(t==='trident')return `<path d="M42 44 Q42 20 60 20 Q78 20 78 44 L72 44 Q72 28 60 28 Q48 28 48 44 Z" fill="#5a3a6a"/><path d="M60 20 L54 8 L60 14 L66 8 Z" fill="${tr}"/><path d="M60 20 L50 12 L56 18 Z" fill="${tr}"/><path d="M60 20 L70 12 L64 18 Z" fill="${tr}"/><path d="M42 42 L24 26 L32 46 Z" fill="${tr}"/><path d="M78 42 L96 26 L88 46 Z" fill="${tr}"/>`;
+ if(t==='general')return `<path d="M42 44 Q42 20 60 20 Q78 20 78 44 L72 44 Q72 28 60 28 Q48 28 48 44 Z" fill="#3a3f4a"/><path d="M42 42 L24 26 L32 46 Z" fill="${tr}"/><path d="M78 42 L96 26 L88 46 Z" fill="${tr}"/><rect x="56" y="12" width="8" height="10" rx="2" fill="${tr}"/><circle cx="60" cy="11" r="3.5" fill="${tr}"/>`;
+ if(t==='whitehelm')return `<path d="M42 44 Q42 20 60 20 Q78 20 78 44 L72 44 Q72 28 60 28 Q48 28 48 44 Z" fill="#c9d4e0"/><path d="M42 42 L24 26 L32 46 Z" fill="#e8eef4"/><path d="M78 42 L96 26 L88 46 Z" fill="#e8eef4"/><rect x="56" y="12" width="8" height="10" rx="2" fill="#e8eef4"/><circle cx="60" cy="11" r="3.5" fill="#f0d089"/>`;
+ if(t==='feather')return `<path d="M40 34 L80 34 L76 26 L44 26 Z" fill="#e8e0cc"/><rect x="42" y="22" width="36" height="6" rx="3" fill="#d8d0bc"/><path d="M72 24 Q88 4 96 2 Q94 18 76 28 Z" fill="#f4ecd8" stroke="${tr}" stroke-width="1"/>`;
+ return '';}
+function weaponSVG(t,tr){
+ if(t==='halberd')return `<rect x="89" y="26" width="3.5" height="88" rx="1.5" fill="#5a4632"/><path d="M91 30 Q74 32 76 48 Q88 44 94 40 Z" fill="${tr}"/><path d="M91 30 Q106 32 104 48 Q92 44 86 40 Z" fill="${tr}"/><path d="M91 30 L96 20 L94 32 Z" fill="${tr}"/>`;
+ if(t==='guandao')return `<rect x="89" y="40" width="3.5" height="74" rx="1.5" fill="#5a4632"/><path d="M92 22 Q112 26 110 44 Q100 52 92 46 Z" fill="${tr}"/><path d="M92 22 Q104 24 106 32 Q98 30 92 34 Z" fill="#7ac9a0"/>`;
+ if(t==='spear')return `<rect x="89" y="30" width="3.5" height="84" rx="1.5" fill="#5a4632"/><path d="M90.7 20 L97 34 L84.5 34 Z" fill="#c9d4e0"/><path d="M90.7 20 L92 26 L89.5 26 Z" fill="#e8eef4"/>`;
+ if(t==='fan')return `<path d="M96 112 A17 17 0 0 1 128 112 Z" fill="#f0e8d8" stroke="${tr}" stroke-width="1.2"/><path d="M100 112 L104 98 M106 112 L108 96 M112 112 L112 95 M118 112 L116 96 M124 112 L120 98" stroke="#b8a888" stroke-width="0.8"/><path d="M112 95 L112 88" stroke="${tr}" stroke-width="1.5"/>`;
+ return '';}
+function portraitSVG(name){
+ const c=cfg[name];const gid='p'+name;
+ return `<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+ <defs><radialGradient id="${gid}b" cx="50%" cy="32%" r="80%"><stop offset="0%" stop-color="${c.bg[0]}"/><stop offset="100%" stop-color="${c.bg[1]}"/></radialGradient>
+ <linearGradient id="${gid}r" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="${c.robe}"/><stop offset="100%" stop-color="${darken(c.robe,0.5)}"/></linearGradient></defs>
+ <circle cx="60" cy="60" r="59" fill="url(#${gid}b)"/>
+ <circle cx="60" cy="50" r="30" fill="${c.trim}" opacity="0.14"/>
+ <path d="M0 80 L18 64 L36 76 L54 62 L72 78 L90 66 L120 80 L120 120 L0 120 Z" fill="${darken(c.bg[1],0.9)}" opacity="0.7"/>
+ ${weaponSVG(c.weapon,c.trim)}
+ <path d="M13 120 C17 88 37 77 60 77 C83 77 103 88 107 120 Z" fill="url(#${gid}r)"/>
+ <path d="M47 80 L60 93 L73 80 L60 87 Z" fill="${c.trim}"/>
+ <ellipse cx="33" cy="83" rx="10" ry="6.5" fill="${darken(c.trim,0.85)}"/>
+ <ellipse cx="87" cy="83" rx="10" ry="6.5" fill="${darken(c.trim,0.85)}"/>
+ <rect x="53" y="61" width="14" height="15" rx="4" fill="${darken(c.face,0.85)}"/>
+ <ellipse cx="60" cy="45" rx="15" ry="17" fill="${c.face}"/>
+ <circle cx="45" cy="47" r="3.2" fill="${c.face}"/><circle cx="75" cy="47" r="3.2" fill="${c.face}"/>
+ ${helmetSVG(c.helmet,c.trim)}
+ ${c.beard==='long'?'<path d="M48 55 Q60 63 72 55 L69 97 Q60 105 51 97 Z" fill="'+c.hair+'"/>':''}
+ <path d="M47 41 L57 39" stroke="#1a1a1a" stroke-width="2.2" stroke-linecap="round"/>
+ <path d="M73 41 L63 39" stroke="#1a1a1a" stroke-width="2.2" stroke-linecap="round"/>
+ <path d="M50 46 L56 46" stroke="#1a1a1a" stroke-width="1.9" stroke-linecap="round"/>
+ <path d="M64 46 L70 46" stroke="#1a1a1a" stroke-width="1.9" stroke-linecap="round"/>
+ <path d="M60 47 L57.5 54 L61 54" fill="none" stroke="#b08050" stroke-width="1.3"/>
+ ${c.beard==='none'?'<path d="M55 59 Q60 61.5 65 59" fill="none" stroke="#8a4a3a" stroke-width="1.5"/>':''}
+ <circle cx="60" cy="60" r="57.5" fill="none" stroke="#d8b45a" stroke-width="3.5"/>
+ </svg>`;
+}
+document.getElementById('chars').innerHTML = Object.keys(cfg).map(n=>`<div class="chip">${portraitSVG(n)}</div>`).join('');
+</script>
+</body>
+</html>
